@@ -150,6 +150,7 @@ def home(request):
 
     )
 
+@login_required
 def faculty_form_partial(request):
 
     form = SubmissionForm()
@@ -182,11 +183,11 @@ def generate_faculty_id():
 
             return faculty_id
 
+@login_required
 def monthly_report_partial(request):
 
     months = (
-
-        Submission.objects
+        Submission.objects.filter(user=request.user)
 
         .annotate(month=TruncMonth("activity_date"))
 
@@ -212,11 +213,11 @@ def monthly_report_partial(request):
 
     )
 
+@login_required
 def show_activities_partial(request):
 
     months = (
-
-        Submission.objects
+        Submission.objects.filter(user=request.user)
 
         .annotate(month=TruncMonth("activity_date"))
 
@@ -242,7 +243,7 @@ def show_activities_partial(request):
 
     )
 
-
+@login_required
 def faculty_form(request):
 
     form = SubmissionForm()
@@ -256,6 +257,7 @@ def faculty_form(request):
     return render(request, "activities/form.html", context)
 
 
+@login_required
 @transaction.atomic
 def submit_form(request):
 
@@ -341,6 +343,7 @@ def submit_form(request):
     # -------------------------------
 
     submission = Submission.objects.create(
+        user=request.user,
         activity=activity,
         activity_date=activity_date,
         description=description
@@ -407,10 +410,11 @@ def submit_form(request):
         ).strftime("%d-%m-%Y %I:%M:%S %p")
     })
 
+@login_required
 def monthly_report(request):
 
     months = (
-        Submission.objects
+        Submission.objects.filter(user=request.user)
         .annotate(month=TruncMonth("activity_date"))
         .values_list("month", flat=True)
         .distinct()
@@ -425,6 +429,7 @@ def monthly_report(request):
         }
     )
 
+@login_required
 def download_report(request):
 
     month = request.POST.get("month")
@@ -436,6 +441,7 @@ def download_report(request):
     month_number = int(month.split("-")[1])
 
     submissions = Submission.objects.filter(
+        user=request.user,
         activity_date__year=year,
         activity_date__month=month_number
     ).prefetch_related(
@@ -453,6 +459,7 @@ def download_report(request):
         }, status=404)
     
     ReportDownload.objects.create(
+        user=request.user,
         month=date(year, month_number, 1)
     )
 
@@ -631,11 +638,11 @@ def add_page_number(canvas, doc):
 
     canvas.restoreState()
 
+@login_required
 def show_activities(request):
 
     months = (
-
-        Submission.objects
+        Submission.objects.filter(user=request.user)
 
         .annotate(month=TruncMonth("activity_date"))
 
@@ -661,6 +668,7 @@ def show_activities(request):
 
     )
 
+@login_required
 def get_activities(request):
 
     print(request.GET)
@@ -671,12 +679,10 @@ def get_activities(request):
 
     month_number=int(month.split("-")[1])
 
-    submissions=Submission.objects.filter(
-
+    submissions = Submission.objects.filter(
+        user=request.user,
         activity_date__year=year,
-
         activity_date__month=month_number
-
     ).prefetch_related(
 
         "faculty_members__faculty",
@@ -753,6 +759,7 @@ def get_activities(request):
 
     })
 
+@login_required
 def download_proof(request,file_id):
 
     attachment=Attachment.objects.get(id=file_id)
@@ -775,15 +782,19 @@ def download_proof(request,file_id):
 
     return response
 
+@login_required
 def dashboard_partial(request):
 
     total_faculty = Faculty.objects.count()
 
-    total_submissions = Submission.objects.count()
+    total_submissions = Submission.objects.filter(
+        user=request.user
+    ).count()
 
     today = timezone.now()
 
     reports_generated = ReportDownload.objects.filter(
+        user=request.user,
         month__year=today.year,
         month__month=today.month
     ).count()
@@ -792,11 +803,14 @@ def dashboard_partial(request):
     current_year = timezone.now().year
 
     month_activities = Submission.objects.filter(
+        user=request.user,
         activity_date__month=current_month,
         activity_date__year=current_year
     ).count()
 
-    recent = Submission.objects.select_related(
+    recent = Submission.objects.filter(
+        user=request.user
+    ).select_related(
         "activity"
     ).order_by("-entry_datetime")[:10]
 
@@ -812,12 +826,17 @@ def dashboard_partial(request):
         }
     )
 
+@login_required
 @require_POST
 def delete_activity(request, id):
 
     try:
 
-        submission = Submission.objects.get(id=id)
+        submission = get_object_or_404(
+            Submission,
+            id=id,
+            user=request.user
+        )
 
         submission.delete()
 
@@ -838,10 +857,15 @@ def delete_activity(request, id):
             "message": "Activity not found."
 
         }, status=404)
-    
+
+@login_required
 def edit_activity(request, id):
 
-    submission = Submission.objects.get(id=id)
+    submission = get_object_or_404(
+        Submission,
+        id=id,
+        user=request.user
+    )
 
     faculty_ids = list(
 
@@ -882,10 +906,15 @@ def edit_activity(request, id):
 
     })
 
+@login_required
 @require_POST
 def update_activity(request,id):
 
-    submission=Submission.objects.get(id=id)
+    submission = get_object_or_404(
+        Submission,
+        id=id,
+        user=request.user
+    )
 
     submission.activity_id=request.POST["activity"]
 
@@ -925,6 +954,7 @@ def update_activity(request,id):
 
     })
 
+@login_required
 @require_POST
 def delete_attachment(request, id):
 
@@ -951,6 +981,7 @@ def delete_attachment(request, id):
 from django.http import JsonResponse
 from .models import Faculty
 
+@login_required
 def add_faculty(request):
 
     if request.method == "POST":
@@ -989,6 +1020,7 @@ def add_faculty(request):
     
 from .models import Activity
 
+@login_required
 def add_activity(request):
 
     if request.method=="POST":
@@ -1008,7 +1040,8 @@ def add_activity(request):
             "created":created
 
         })
-    
+
+@login_required
 def get_faculty_list(request):
 
     faculty = Faculty.objects.all().order_by("faculty_name")
@@ -1021,7 +1054,7 @@ def get_faculty_list(request):
         for f in faculty
     ], safe=False)
 
-
+@login_required
 def get_activity_list(request):
 
     activities = Activity.objects.all().order_by("activity_name")

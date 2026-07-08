@@ -3,6 +3,7 @@ import os
 import uuid
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Faculty(models.Model):
@@ -29,7 +30,17 @@ class Activity(models.Model):
 
 
 class Submission(models.Model):
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="submissions"
+    )
+
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE
+    )
 
     activity_date = models.DateField()
 
@@ -40,7 +51,7 @@ class Submission(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.activity} - {self.activity_date}"
+        return f"{self.user.username} - {self.activity} - {self.activity_date}"
 
 
 class SubmissionFaculty(models.Model):
@@ -81,12 +92,19 @@ class Attachment(models.Model):
 
     def __str__(self):
         return self.original_filename
-    
+
 class ReportDownload(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
 
     month = models.DateField()
 
     downloaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.month.strftime("%B %Y")
+        return f"{self.user.username} - {self.month.strftime('%B %Y')}"
