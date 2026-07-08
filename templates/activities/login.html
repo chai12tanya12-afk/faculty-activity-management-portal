@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Faculty Activity Management Portal</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+<body class="login-body">
+
+<div class="login-card">
+
+    <img
+        src="{% static 'images/logo.png' %}"
+        class="login-logo">
+
+    <h1>Faculty Activity Management Portal</h1>
+
+    <p>
+        Department of Information Technology
+    </p>
+
+    <h2>Welcome Back</h2>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required>
+
+        {% if error %}
+            <div class="login-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <button type="submit">
+
+            Sign In
+
+        </button>
+
+    </form>
+
+    <small>
+
+        Authorized users only.
+
+    </small>
+
+</div>
+
+</body>
+
+</html>

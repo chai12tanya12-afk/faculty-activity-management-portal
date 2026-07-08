@@ -1,0 +1,54 @@
+<div class="activity-wrapper">
+
+    <div class="activity-banner">
+
+        <div>
+            <h2>Monthly Report Download</h2>
+
+            <p>
+                Generate and download the faculty activity report for a selected month.
+            </p>
+        </div>
+
+        <div class="banner-icon">
+            📄
+        </div>
+
+    </div>
+
+    <div class="report-card">
+
+        <form id="downloadForm">
+
+            {% csrf_token %}
+
+            <div class="report-field">
+
+                <label>Select Month</label>
+
+                <input
+                    type="month"
+                    id="month"
+                    name="month"
+                    required>
+
+            </div>
+
+            <div class="report-buttons">
+
+                <button
+                    type="submit"
+                    id="downloadButton"
+                    class="primaryButton">
+
+                    ⬇ Download PDF
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Faculty Monthly Activities Management System</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+
+    
+
+    {% block extra_css %}
+    {% endblock %}
+</head>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<body>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+
+
+    <!-- Common JS -->
+    <script src="{% static 'js/home.js' %}"></script>
+
+    <script src="{% static 'js/form.js' %}"></script>
+
+    <script src="{% static 'js/monthlyReport.js' %}"></script>
+
+    <script src="{% static 'js/showActivities.js' %}"></script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+
+</html>

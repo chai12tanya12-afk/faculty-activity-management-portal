@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<header class="mac-header">
+
+    <div class="mac-top">
+
+        <img src="{% static 'images/logo.png' %}" class="mac-logo">
+
+        <div class="portal-info">
+
+            <h1>Faculty Activity Management Portal</h1>
+
+            <p>Department of Information Technology</p>
+
+        </div>
+
+        <div class="user-panel">
+
+            <div class="user-name">
+                👤 {{ request.user.username }}
+            </div>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="mac-nav-wrapper">
+
+        <nav class="mac-nav">
+
+            <a href="#"
+               id="dashboardBtn"
+               data-url="{% url 'dashboard' %}">
+                Dashboard
+            </a>
+
+            <a href="#"
+               id="facultyBtn"
+               data-url="{% url 'faculty_form' %}">
+                Activity Entry
+            </a>
+
+            <a href="#"
+               id="reportBtn"
+               data-url="{% url 'monthly_report' %}">
+                Reports
+            </a>
+
+            <a href="#"
+               id="activityBtn"
+               data-url="{% url 'show_activities' %}">
+                Activities
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<div id="mainContent">
+
+
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}

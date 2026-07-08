@@ -1,0 +1,172 @@
+{% load static %}
+
+<div class="activity-wrapper">
+
+    <div class="activity-banner">
+
+        <div>
+            <h2>Faculty Activity Entry</h2>
+            <p>
+                Submit faculty monthly activities with supporting documents.
+            </p>
+        </div>
+
+        <div class="banner-icon">
+            📋
+        </div>
+
+    </div>
+
+    <form id="activityForm" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="activity-grid">
+
+            <!-- Faculty -->
+            <div class="card-box">
+
+                <div class="card-title">
+                    👤 Faculty Members
+                </div>
+
+                <select id="faculty"
+                        name="faculty"
+                        multiple
+                        style="width:100%;">
+                    {% for f in faculty %}
+                    <option value="{{ f.id }}">
+                        {{ f.faculty_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+            </div>
+
+            <!-- Activity -->
+            <div class="card-box">
+
+                <div class="card-title">
+                    📘 Activity
+                </div>
+
+                <select id="activity" name="activity" style="width:100%;">
+                    <option value=""></option>
+
+                    {% for a in activity %}
+                    <option value="{{ a.id }}">
+                        {{ a.activity_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+            </div>
+
+            <!-- Date -->
+            <div class="card-box">
+
+                <div class="card-title">
+                    📅 Activity Date
+                </div>
+
+                {{ form.activity_date }}
+
+                <br></br>
+
+                <div class="card-title">
+                    📅 Date of Entry
+                </div>
+
+                <input
+                    type="date"
+                    id="entry_date"
+                    class="form-control">
+
+            </div>
+
+            <!-- Upload -->
+            <div class="card-box">
+
+                <div class="card-title">
+                    📂 Upload Proof
+                </div>
+
+                <label class="upload-area">
+
+                    <span>☁</span>
+
+                    <h4>Drag & Drop PDF Files</h4>
+
+                    <small>
+                        or click here to browse
+                    </small>
+
+                    <input
+                        type="file"
+                        id="attachments"
+                        name="attachments"
+                        multiple
+                        accept=".pdf">
+
+                </label>
+
+            </div>
+
+        </div>
+
+        <!-- Files -->
+
+        <div class="card-box">
+
+            <div class="card-title">
+                📎 Selected Files
+            </div>
+
+            <ul id="fileList"></ul>
+
+            <h4 id="existingTitle" style="display:none;">
+                Existing Attachments
+            </h4>
+
+            <div id="existingAttachments"></div>
+
+        </div>
+
+        <br></br>
+
+        <!-- Description -->
+
+        <div class="card-box description-card">
+
+            <div class="card-title">
+                📝 Description
+            </div>
+
+            {{ form.description }}
+
+        </div>
+
+        <div class="button-area">
+
+            <button
+                type="button"
+                id="cancelEditButton"
+                class="secondaryButton">
+
+                Reset
+
+            </button>
+
+            <button
+                type="submit"
+                class="primaryButton">
+
+                🚀 Submit Activity
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

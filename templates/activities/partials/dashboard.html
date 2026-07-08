@@ -1,0 +1,112 @@
+<div class="activity-wrapper">
+
+    <!-- Welcome -->
+
+    <div class="activity-banner">
+
+        <div>
+            <h2>Dashboard</h2>
+            <p>
+                Centralized insights for the Department of Information Technology.
+            </p>
+        </div>
+
+        <div class="banner-icon">
+            🏠
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <i class="fa-solid fa-user-group"></i>
+
+            <h2>{{ total_faculty }}</h2>
+
+            <span>Faculty Members</span>
+
+        </div>
+
+        <div class="stat-card">
+
+            <i class="fa-solid fa-list-check"></i>
+
+            <h2>{{ total_submissions }}</h2>
+    
+            <span>Total Submissions</span>
+
+        </div>
+
+        <div class="stat-card">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            <h2>{{ reports_generated }}</h2>
+
+            <span>Reports Generated</span>
+
+        </div>
+
+        <div class="stat-card">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            <h2>{{ month_activities }}</h2>
+
+            <span>This Month</span>
+
+        </div>
+
+    </div>
+
+    <!-- Recent -->
+
+    <div class="recent-card">
+
+        <div class="section-title">
+
+            Recent Submissions
+
+        </div>
+
+        {% for item in recent %}
+
+        <div class="recent-item">
+
+            <div>
+
+                <h4>{{ item.faculty }}</h4>
+
+                <p>{{ item.activity }}</p>
+
+            </div>
+
+            <div class="recent-date">
+
+                <td>
+
+                    {{ item.entry_datetime|date:"F j, Y, g:i a" }}
+
+                    {% if item.updated_at and item.updated_at != item.entry_datetime %}
+                        <br>
+                        <small style="color:#6ea7fc;">
+                            ✏️ Edited:
+                            {{ item.updated_at|date:"F j, Y, g:i a" }}
+                        </small>
+                    {% endif %}
+
+                </td>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
