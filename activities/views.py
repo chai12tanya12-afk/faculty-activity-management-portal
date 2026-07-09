@@ -93,8 +93,8 @@ from django.contrib.auth import logout
 
 def login_view(request):
 
-    # Always clear any existing session
-    logout(request)
+    if request.user.is_authenticated:
+        logout(request)
 
     if not User.objects.exists():
         return redirect("register")
