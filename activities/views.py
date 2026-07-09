@@ -139,7 +139,7 @@ def logout_view(request):
 
     return redirect("login")
 
-@login_required(login_url="login")
+@login_required
 def home(request):
 
     return render(
