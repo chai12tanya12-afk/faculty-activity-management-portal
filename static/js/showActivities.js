@@ -58,8 +58,7 @@ function initializeShowActivities() {
                         <td>
                             ${item.entry_datetime}
                             ${
-                                item.updated_at &&
-                                item.updated_at !== item.entry_datetime
+                                item.is_edited
                                 ? `<br><small class="editedText">✏️ Edited: ${item.updated_at}</small>`
                                 : ""
                             }

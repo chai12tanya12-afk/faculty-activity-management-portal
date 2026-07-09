@@ -91,7 +91,7 @@
 
                     {{ item.entry_datetime|date:"F j, Y, g:i a" }}
 
-                    {% if item.updated_at and item.updated_at != item.entry_datetime %}
+                    {% if item.is_edited %}
                         <br>
                         <small style="color:#6ea7fc;">
                             ✏️ Edited:

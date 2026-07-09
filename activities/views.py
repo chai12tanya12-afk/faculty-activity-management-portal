@@ -747,6 +747,8 @@ def get_activities(request):
                     submission.updated_at
                 ).strftime("%B %d, %Y, %I:%M:%S %p"),
 
+                "is_edited": submission.is_edited,
+
                 "description":submission.description,
 
                 "attachments": attachments,
@@ -922,6 +924,7 @@ def update_activity(request,id):
 
     submission.description=request.POST["description"]
 
+    submission.is_edited = True
     submission.save()
 
     submission.faculty_members.all().delete()
