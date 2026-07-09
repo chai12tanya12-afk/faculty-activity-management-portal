@@ -89,49 +89,38 @@ def register_view(request):
 
     return render(request,"activities/register.html")
 
+from django.contrib.auth import logout
+
 def login_view(request):
 
-    if not User.objects.exists():
+    # Always clear any existing session
+    logout(request)
 
+    if not User.objects.exists():
         return redirect("register")
 
-    if request.method=="POST":
+    if request.method == "POST":
 
-        username=request.POST["username"]
+        username = request.POST["username"]
+        password = request.POST["password"]
 
-        password=request.POST["password"]
-
-        user=authenticate(
-
+        user = authenticate(
             request,
-
             username=username,
-
             password=password
-
         )
 
         if user:
-
-            login(request,user)
-
+            login(request, user)
             return redirect("home")
 
         return render(
-
             request,
-
             "activities/login.html",
-
-            {
-
-                "error":"Invalid Username or Password"
-
-            }
-
+            {"error": "Invalid Username or Password"}
         )
 
-    return render(request,"activities/login.html")
+    return render(request, "activities/login.html")
 
 def logout_view(request):
 
